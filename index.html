@@ -1,25 +1,21 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
-  <title>Login</title>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js"></script>
+  <meta charset="UTF-8">
+  <title>Login con Firebase</title>
 </head>
 <body>
   <h2>Iniciar Sesión</h2>
-  <input type="email" id="email" placeholder="Correo">
-  <input type="password" id="password" placeholder="Contraseña">
+  <input type="email" id="email" placeholder="Correo"><br><br>
+  <input type="password" id="password" placeholder="Contraseña"><br><br>
   <button id="loginBtn">Entrar</button>
+  <button id="registerBtn">Registrarse</button>
+
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 
   <script>
-    // Import the functions you need from the SDKs you need
-    import { initializeApp } from "firebase/app";
-    import { getAnalytics } from "firebase/analytics";
-    // TODO: Add SDKs for Firebase products that you want to use
-    // https://firebase.google.com/docs/web/setup#available-libraries
-    
-    // Your web app's Firebase configuration
-    // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+    // Tu configuración de Firebase
     const firebaseConfig = {
       apiKey: "AIzaSyCc6CMb9XEEkPyUJQsQRqpzqvJZelHgzhA",
       authDomain: "tclogin-5881d.firebaseapp.com",
@@ -29,24 +25,39 @@
       appId: "1:976782544606:web:04746ba41689fd03d5fc4f",
       measurementId: "G-WWJ784H883"
     };
-    
-    // Initialize Firebase
-    const app = initializeApp(firebaseConfig);
-    const analytics = getAnalytics(app);
 
+    // Inicializar Firebase
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+
+    // Botón de registro
+    document.getElementById("registerBtn").addEventListener("click", () => {
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+      auth.createUserWithEmailAndPassword(email, password)
+        .then((userCredential) => {
+          alert("Usuario registrado: " + userCredential.user.email);
+        })
+        .catch((error) => {
+          alert("Error: " + error.message);
+        });
+    });
+
+    // Botón de login
     document.getElementById("loginBtn").addEventListener("click", () => {
       const email = document.getElementById("email").value;
       const password = document.getElementById("password").value;
-
       auth.signInWithEmailAndPassword(email, password)
         .then((userCredential) => {
-          alert("Bienvenido " + userCredential.user.email);
-          // Aquí puedes redirigir al usuario a la plataforma
+          alert("Bienvenido: " + userCredential.user.email);
+          // Aquí podrías redirigir a otra página privada
+          // window.location.href = "privado.html";
         })
         .catch((error) => {
-          alert(error.message);
+          alert("Error: " + error.message);
         });
     });
   </script>
 </body>
 </html>
+
