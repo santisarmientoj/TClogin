@@ -2,19 +2,21 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Login con Firebase</title>
+  <title>Login</title>
 </head>
 <body>
   <h2>Iniciar Sesión</h2>
-  <input type="email" id="email" placeholder="Correo"><br><br>
-  <input type="password" id="password" placeholder="Contraseña"><br><br>
-  <button id="loginBtn">Entrar</button>
+  <form id="loginForm">
+    <input type="email" id="email" placeholder="Correo" required>
+    <input type="password" id="password" placeholder="Contraseña" required>
+    <button type="submit">Ingresar</button>
+  </form>
 
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+    import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
 
-  <script>
-    // Tu configuración de Firebase
+    // Configuración de tu Firebase
     const firebaseConfig = {
       apiKey: "AIzaSyCc6CMb9XEEkPyUJQsQRqpzqvJZelHgzhA",
       authDomain: "tclogin-5881d.firebaseapp.com",
@@ -25,38 +27,23 @@
       measurementId: "G-WWJ784H883"
     };
 
-    // Inicializar Firebase
-    firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
 
-    // Botón de registro
-    /*document.getElementById("registerBtn").addEventListener("click", () => {
+    document.getElementById("loginForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
       const email = document.getElementById("email").value;
       const password = document.getElementById("password").value;
-      auth.createUserWithEmailAndPassword(email, password)
-        .then((userCredential) => {
-          alert("Usuario registrado: " + userCredential.user.email);
-        })
-        .catch((error) => {
-          alert("Error: " + error.message);
-        });
-    });*/
 
-    // Botón de login
-    document.getElementById("loginBtn").addEventListener("click", () => {
-      const email = document.getElementById("email").value;
-      const password = document.getElementById("password").value;
-      auth.signInWithEmailAndPassword(email, password)
-        .then((userCredential) => {
-          alert("Bienvenido: " + userCredential.user.email);
-          // Aquí podrías redirigir a otra página privada
-          // window.location.href = "privado.html";
-        })
-        .catch((error) => {
-          alert("Error: " + error.message);
-        });
+      try {
+        await signInWithEmailAndPassword(auth, email, password);
+        window.location.href = "privado.html"; // Redirigir a la página protegida
+      } catch (error) {
+        alert("Error en login: " + error.message);
+      }
     });
   </script>
 </body>
 </html>
+
 
