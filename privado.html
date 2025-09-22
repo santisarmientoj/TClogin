@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Área Privada</title>
+</head>
+<body>
+  <h1>Área Privada</h1>
+  <p id="userInfo">Cargando...</p>
+  <button id="logoutBtn">Cerrar Sesión</button>
+
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+
+  <script>
+    // Tu configuración de Firebase
+    const firebaseConfig = {
+      apiKey: "AIzaSyCc6CMb9XEEkPyUJQsQRqpzqvJZelHgzhA",
+      authDomain: "tclogin-5881d.firebaseapp.com",
+      projectId: "tclogin-5881d",
+      storageBucket: "tclogin-5881d.firebasestorage.app",
+      messagingSenderId: "976782544606",
+      appId: "1:976782544606:web:04746ba41689fd03d5fc4f",
+      measurementId: "G-WWJ784H883"
+    };
+
+    // Inicializar Firebase
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+
+    // Verificar si el usuario está autenticado
+    auth.onAuthStateChanged((user) => {
+      if (user) {
+        document.getElementById("userInfo").innerText = 
+          "Bienvenido: " + user.email;
+      } else {
+        // Si no hay usuario logueado, redirigir al login
+        window.location.href = "index.html";
+      }
+    });
+
+    // Botón de logout
+    document.getElementById("logoutBtn").addEventListener("click", () => {
+      auth.signOut().then(() => {
+        alert("Sesión cerrada");
+        window.location.href = "index.html";
+      });
+    });
+  </script>
+</body>
+</html>
